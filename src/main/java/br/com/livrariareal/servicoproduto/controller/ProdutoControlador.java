@@ -1,9 +1,10 @@
 package br.com.livrariareal.servicoproduto.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,9 +24,8 @@ import br.com.livrariareal.servicoproduto.services.ProdutoServico;
 @RestController
 @RequestMapping("/api/produtos")
 public class ProdutoControlador {
-
-	private ProdutoServico produtoServico;
 	
+	private ProdutoServico produtoServico;
 	
 	@Autowired
 	public ProdutoControlador(ProdutoServico produtoServico) {
@@ -71,7 +71,7 @@ public class ProdutoControlador {
 	 */
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ProdutoData inserirProduto(@RequestBody @Validated ProdutoForm produto){
+	public ProdutoData inserirProduto(@Valid @RequestBody ProdutoForm produto){
 		return produtoServico.salvar(produto);
 	}
 	/**
@@ -82,7 +82,7 @@ public class ProdutoControlador {
 	 */
 	@PutMapping
 	@ResponseStatus(HttpStatus.OK)
-	public ProdutoData alterarProduto(@RequestBody @Validated ProdutoForm produto){
+	public ProdutoData alterarProduto(@Valid @RequestBody ProdutoForm produto){
 		return produtoServico.alterar(produto);
 	}
 	/**

@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,8 +33,9 @@ public class ProdutoServicoImpl implements ProdutoServico {
 		if( produto.isPresent() ) {
 			return produtoAssembler.toModel( produto.get() );
 		}else {
-			throw new ProdutoNaoEncontradoException( messageSource.getMessage("api.erro.produto.nao.encontrado", null, Locale.getDefault())  );//
-		}	
+			throw new ProdutoNaoEncontradoException( messageSource.getMessage("api.erro.produto.nao.encontrado", null, Locale.getDefault()) );
+		}
+		
 	}
 	
 	@Override
@@ -67,14 +67,14 @@ public class ProdutoServicoImpl implements ProdutoServico {
 				.preco( produto.getPreco() )
 				.ativo( produto.getAtivo() )
 				.build();
-			try {
-				persistir.setId( produtoRepositorio.save(persistir).getId() );
-				return produtoAssembler.toModel(persistir);
-			}catch(DuplicateKeyException dke) {
-				throw new BancoNaoModificadoException( messageSource.getMessage("api.erro.mongodb.chave.duplicada", null, Locale.getDefault()) );
-			}		
+		try {
+			persistir.setId( produtoRepositorio.save(persistir).getId() );
+			return produtoAssembler.toModel(persistir);
+		}catch(Exception iae){//IllegalArgumentException & OptimisticLockingFailureException
+			throw new BancoNaoModificadoException( messageSource.getMessage("api.erro.produto.modificacao.nao.realizada", null, Locale.getDefault()) );
+		}
 	}
-
+	
 	@Override
 	public ProdutoData inativar(String id) {
 		Optional<Produto> produto = produtoRepositorio.findById(id);
@@ -82,7 +82,7 @@ public class ProdutoServicoImpl implements ProdutoServico {
 			produto.get().setAtivo(false); 
 			return produtoAssembler.toModel( produtoRepositorio.save( produto.get() ) );
 		}else {
-			throw new ProdutoNaoEncontradoException( messageSource.getMessage("api.erro.produto.nao.encontrado", null, Locale.getDefault()) );//
+			throw new ProdutoNaoEncontradoException( messageSource.getMessage("api.erro.produto.nao.encontrado", null, Locale.getDefault()) );
 		}
 	}
 	
