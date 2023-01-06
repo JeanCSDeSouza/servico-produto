@@ -12,14 +12,7 @@
     </root>
     
 	<logger name="br.com.livrariareal.servicoproduto" level="INFO"/>
-
-	<logger name="org.hibernate" level="INFO"/>
-	
-	<logger name="log4j.logger.org.hibernate" level="INFO"/>
-   
-   
-   <logger name="log4j.logger.org.hibernate.type" level="TRACE"/>
-   
+   <logger name="org.mongodb" level="INFO"/>
     <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>

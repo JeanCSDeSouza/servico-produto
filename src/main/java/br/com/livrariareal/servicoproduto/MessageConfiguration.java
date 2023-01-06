@@ -15,7 +15,7 @@ public class MessageConfiguration {
         messageSource.setBasenames(
                 "classpath:/localizacao/api_mensagens_erro"
         );
-        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setDefaultEncoding("ISO-8859-1");
         return messageSource;
     }
 }
